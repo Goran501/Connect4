@@ -1,15 +1,3 @@
-let turn = 0;
-let incorrectElement;
-let elementWasIncorrect = false;
-
-class Player {
-    constructor(givenColor) {
-        this.color = [givenColor];
-    }
-
-
-}
-
 class Game {
     constructor() {
         this.turn = 0;
