@@ -1,66 +1,103 @@
-let turn = 0;
-let incorrectElement;
-let elementWasIncorrect = false;
-
-class Player {
-    constructor(givenColor) {
-        this.color = [givenColor];
-    }
-
-
-}
-
 class Game {
     constructor() {
         this.turn = 0;
-        this.turnColor = ["colorYellow", "colorRed"]
         this.columns = [...document.getElementsByClassName("column")];
+        this.gameBoard = this.fetchBoard();
+    }
+
+    fetchBoard() {
+        let gameBoardPopulated = new Array;
+        for(let i = 0; i < rowLength; i++) {
+            gameBoardPopulated[i] = [];
+            for(let j = 0; j < columnLength; j++) {
+                gameBoardPopulated[i][j] = this.columns[i].children[j];
+            }
+        }
+        return(gameBoardPopulated);
     }
 
     move(field) {
-        let fieldToChange = field;
-        let currentColumn = this.columns[this.columns.indexOf(field.parentElement)].children
+        let currentColumn = Array.from(this.columns[this.columns.indexOf(field.parentElement)].children);
+        let indexOfField;
 
-        for (let i = currentColumn.length - 1; i > 0; i--) {
-            if (!(currentColumn[i].classList.contains("colorYellow") || currentColumn[i].classList.contains("colorRed"))) {
-                fieldToChange = currentColumn[i];
-                break;
+        //Load first element without a color class assigned
+        field = currentColumn.findLast((element) => element.classList.length <= 1);
+
+        //If the above statement did not find an element, the column is either full or empty. 
+        //Following check returns if full, and if empty gets the first element of the column.
+        if (!field) {
+            if(currentColumn[currentColumn.length-1].classList.length == 1) {
+                field = currentColumn[currentColumn.length-1];
             }
+            else {
+                return;
+            }   
         }
-        if (fieldToChange.classList.contains("colorYellow") || fieldToChange.classList.contains("colorRed")) {
-            return;
-        }
-        fieldToChange.classList.add(this.turn % 2 ? "colorYellow" : "colorRed")
+        field.classList.add(this.turn % 2 ? "Yellow" : "Red");
+        indexOfField = [this.columns.indexOf(field.parentElement), [...field.parentElement.children].indexOf(field)];
         this.turn++;
 
-        this.winCheck(fieldToChange, currentColumn);
+        this.horizontalWinCheck(indexOfField)
+        this.verticalWinCheck(indexOfField)
+        this.diagonalWinCheck(indexOfField, 'left')
+        this.diagonalWinCheck(indexOfField, 'right')
     }
-//TODO clean up messy code and add diagonal check
-    winCheck(field, currentColumn) {
-        let counter = 0;
-        let index = [...field.parentElement.children].indexOf(field);
-
-        console.log(this.columns[currentColumn.length - 1].children[index])
-        for (let i = currentColumn.length - 1; i > 0; i--) {
-            if (currentColumn[i].classList.contains(this.turnColor[this.turn % 2])) {counter++;}
-            else {counter = 1;}
-            if (counter == 4) {this.playerWon(this.turn % 2); return}
-        }
-        counter = 0;
-        for (let i = field.parentElement.children.length; i > 0; i--) {
-            if (this.columns[i].children[index].classList.contains(this.turnColor[this.turn % 2])) {counter++;}
-            else {counter = 1;}
-            if (counter == 4) {this.playerWon(this.turn % 2); return}
-        }
-
-    }
-
+    
     playerWon() {
-        console.log("Win condition reached");
+        setTimeout(() => alert("Win condition reached by " + turnColor[this.turn % 2], 0));
+    }
+
+    horizontalWinCheck(indexOfField) {
+        let counter = 0;        
+        for(let i = 0; i < rowLength; i++) {
+            counter = this.gameBoard[i][indexOfField[1]].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
+            if (counter == 4) {
+                this.playerWon(this.turn % 2);
+                return(true);
+            }
+        }
+    }
+    verticalWinCheck(indexOfField) {
+        let counter = 0;
+        for(let i = 0; i < columnLength; i++) {
+            counter = this.gameBoard[indexOfField[0]][i].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
+            if (counter == 4) {
+                this.playerWon(this.turn % 2);
+                return(true);
+            }
+        }
+    }
+    diagonalWinCheck(indexOfField, direction) {
+        let counter = 0;
+        let xAxis;
+        let yAxis = 5;
+
+        switch (direction) {
+            case 'left':
+                xAxis = (5 - indexOfField[1]) + indexOfField[0];
+                break;
+            case 'right':
+                xAxis = (5 - indexOfField[1] - indexOfField[0]);
+                break;
+        }
+        let maxHeight = xAxis;
+        for(let i = 0; i < maxHeight; i++) {
+            counter = this.gameBoard[xAxis][yAxis].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
+            if (counter == 4) {
+                this.playerWon(this.turn % 2); 
+                return(true);
+            }
+            if(direction == 'left') {
+                --xAxis; }
+            else {
+                ++xAxis; }
+            --yAxis
+        }
     }
 }
-//     //column
-//     console.log(fields.indexOf(element.parentElement) + 1);
-//     //row
-//     console.log([...element.parentElement.children].indexOf(element) + 1);
+
+const rowLength = 7;
+const columnLength = 6;
+const turnColor = ["Yellow", "Red"];
+
 currentGame = new Game;
