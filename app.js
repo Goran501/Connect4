@@ -73,17 +73,24 @@ class Game {
         let counter = 0;
         let xAxis;
         let yAxis = 5;
-
+        let maxHeight;
+        
         switch (direction) {
             case 'left':
                 xAxis = (5 - indexOfField[1]) + indexOfField[0];
+                console.log(indexOfField[0] + " | " + indexOfField[1])
+                maxHeight = xAxis;
                 break;
             case 'right':
-                xAxis = (5 - indexOfField[1] - indexOfField[0]);
+                xAxis = indexOfField[0] - (4 - indexOfField[1]);
+                maxHeight = columnLength - xAxis;
                 break;
         }
-        let maxHeight = xAxis;
+
+        console.log('Max height ' + maxHeight)
         for(let i = 0; i < maxHeight; i++) {
+            console.log(xAxis + 'x y' + yAxis)
+            console.log(this.gameBoard[xAxis][yAxis])
             counter = this.gameBoard[xAxis][yAxis].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
             if (counter == 4) {
                 this.playerWon(this.turn % 2); 
@@ -93,7 +100,7 @@ class Game {
                 --xAxis; }
             else {
                 ++xAxis; }
-            --yAxis
+            --yAxis;
         }
     }
 }
