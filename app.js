@@ -37,12 +37,14 @@ class Game {
         indexOfField = [this.columns.indexOf(field.parentElement), [...field.parentElement.children].indexOf(field)];
         this.turn++;
 
+        //Add so checks are made only is there are neighbouring fields with the same class, depending on direction different methods will be called
         this.horizontalWinCheck(indexOfField)
         this.verticalWinCheck(indexOfField)
         this.diagonalWinCheck(indexOfField, 'left')
         this.diagonalWinCheck(indexOfField, 'right')
     }
     
+    //Will utilize the score board once it's made instead
     playerWon() {
         setTimeout(() => alert("Win condition reached by " + turnColor[this.turn % 2], 0));
     }

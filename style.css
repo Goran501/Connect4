@@ -17,7 +17,7 @@ h1 {
     background-color: rgb(74, 135, 216);
     margin-left: 100px;
 }
-#console {
+#scoreBoard {
     display: flex;
     flex-direction: row;
     border: 2px solid rgb(85, 85, 85);
