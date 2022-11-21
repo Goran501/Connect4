@@ -72,17 +72,35 @@ class Game {
     diagonalWinCheck(indexOfField, direction) {
         let counter = 0;
         let xAxis;
-        let yAxis = 5;
+        let yAxis;
+        let maxHeight;
 
         switch (direction) {
             case 'left':
-                xAxis = (5 - indexOfField[1]) + indexOfField[0];
+                if ((indexOfField[0] - indexOfField[1]) >= 2) {
+                    xAxis = 6;
+                    yAxis = indexOfField[1] + (xAxis - indexOfField[0]);
+                    maxHeight = xAxis - indexOfField[0];
+                } 
+                else {
+                    yAxis = 5;
+                    xAxis = indexOfField[0] + (yAxis - indexOfField[1]);
+                    maxHeight = xAxis;
+                }
                 break;
             case 'right':
-                xAxis = (5 - indexOfField[1] - indexOfField[0]);
+                if ((indexOfField[0] + indexOfField[1]) <= 5) {
+                    xAxis = 0;
+                    yAxis = indexOfField[0] + indexOfField[1];
+                    maxHeight = yAxis;
+                } 
+                else {
+                    yAxis = 5;
+                    xAxis = indexOfField[0] - (yAxis - indexOfField[1])
+                    maxHeight = Math.abs(xAxis - rowLength);
+                }
                 break;
         }
-        let maxHeight = xAxis;
         for(let i = 0; i < maxHeight; i++) {
             counter = this.gameBoard[xAxis][yAxis].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
             if (counter == 4) {
