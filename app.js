@@ -102,6 +102,8 @@ class Game {
                 break;
         }
         for(let i = 0; i < maxHeight; i++) {
+            console.log(xAxis + 'x y' + yAxis)
+            console.log(this.gameBoard[xAxis][yAxis])
             counter = this.gameBoard[xAxis][yAxis].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
             if (counter == 4) {
                 this.playerWon(this.turn % 2); 
@@ -111,7 +113,7 @@ class Game {
                 --xAxis; }
             else {
                 ++xAxis; }
-            --yAxis
+            --yAxis;
         }
     }
 }
