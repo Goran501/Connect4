@@ -6,10 +6,10 @@ class Game {
     }
 
     fetchBoard() {
-        let gameBoardPopulated = new Array;
-        for(let i = 0; i < rowLength; i++) {
+        let gameBoardPopulated = [];
+        for(let i = 0; i < ROWLENGTH; i++) {
             gameBoardPopulated[i] = [];
-            for(let j = 0; j < columnLength; j++) {
+            for(let j = 0; j < COLUMNLENGTH; j++) {
                 gameBoardPopulated[i][j] = this.columns[i].children[j];
             }
         }
@@ -51,7 +51,7 @@ class Game {
 
     horizontalWinCheck(indexOfField) {
         let counter = 0;        
-        for(let i = 0; i < rowLength; i++) {
+        for(let i = 0; i < ROWLENGTH; i++) {
             counter = this.gameBoard[i][indexOfField[1]].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
             if (counter == 4) {
                 this.playerWon(this.turn % 2);
@@ -61,7 +61,7 @@ class Game {
     }
     verticalWinCheck(indexOfField) {
         let counter = 0;
-        for(let i = 0; i < columnLength; i++) {
+        for(let i = 0; i < COLUMNLENGTH; i++) {
             counter = this.gameBoard[indexOfField[0]][i].classList.contains(turnColor[this.turn % 2]) ? counter + 1 : 0;
             if (counter == 4) {
                 this.playerWon(this.turn % 2);
@@ -97,7 +97,7 @@ class Game {
                 else {
                     yAxis = 5;
                     xAxis = indexOfField[0] - (yAxis - indexOfField[1])
-                    maxHeight = Math.abs(xAxis - rowLength);
+                    maxHeight = Math.abs(xAxis - ROWLENGTH);
                 }
                 break;
         }
@@ -116,8 +116,8 @@ class Game {
     }
 }
 
-const rowLength = 7;
-const columnLength = 6;
+const ROWLENGTH = 7;
+const COLUMNLENGTH = 6;
 const turnColor = ["Yellow", "Red"];
 
 currentGame = new Game;
